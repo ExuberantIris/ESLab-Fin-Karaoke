@@ -1,7 +1,7 @@
 import pygame
 import asyncio
 import random
-
+import time
 from Pitch import freq_to_pitch, Pitch, PitchWithOctave
 
 # Initialize Pygame
@@ -19,7 +19,7 @@ RED   = (255, 0, 0)
 
 # Data storage
 points = []  # list of (x, y)
-SHIFT_PIXELS = 10  # how much to move left each update
+SHIFT_PIXELS = 5  # how much to move left each update
 POINT_RADIUS = 5
 
 # Axis ranges for y-values
@@ -67,10 +67,72 @@ def UpdatePlot(y):
             screen.blit(text_surface, (WIDTH/2 + 3, real_top - real_width / 2))
     pygame.display.flip()
 
+TICK_MS = 50 #ms
+MARGIN = 200 # 容錯空間
+screen_half_unit_span = WIDTH / 2 / SHIFT_PIXELS
+time_half_span = TICK_MS * screen_half_unit_span
+MS_TO_LENGTH_UNIT = SHIFT_PIXELS / TICK_MS
+BASE_TIME = 0
+
+base_time = time.time_ns() / 1_000_000
+thing = []
+new_point = []
+import json
+with open("AWholeNewWorld.json", "r") as f:
+    thing = json.load(f)
+
+def update_plot_prime():
+    cur_time_ms = pygame.mixer.music.get_pos()
+    print(cur_time_ms)
+    most_left_time = cur_time_ms - time_half_span - MARGIN
+    most_right_time = cur_time_ms + time_half_span + MARGIN
+
+    make_init_window()
+    pop_num = 0
+    for data in thing:
+        if data["time"] + data["duration"] < most_left_time:
+            pop_num += 1
+            continue
+        elif data["time"] > most_right_time:
+            break
+
+        pitch = PitchWithOctave.from_str(data["pitch"])
+        real_top, real_width = pitch_data[pitch]
+
+        offset_unit = (data["time"] - cur_time_ms) * MS_TO_LENGTH_UNIT
+        start = WIDTH / 2 + offset_unit
+        width = data["duration"] * MS_TO_LENGTH_UNIT
+
+        rect_value = pygame.Rect(start, real_top, width, real_width)
+        pygame.draw.rect(screen, YELLOW, rect_value)
+    
+    pygame.draw.line(screen, BLACK, (WIDTH / 2, 0), (WIDTH/2, HEIGHT), 1)
+
+    if pop_num > 0:
+        for i in range(pop_num):
+            thing.pop(0)
+        # if px == points[-1][0]:
+        #     text_surface = my_font.render(f"{pitch}", False, (0, 0, 0))
+        #     screen.blit(text_surface, (WIDTH/2 + 3, real_top - real_width / 2))
+    pygame.display.flip()
+
 async def add_points():
     """Simulate async incoming data."""
     random.seed()
     while True:
+        UpdatePlot()
+        await asyncio.sleep(0.05)
+        # y = random.uniform(Y_MIN, Y_MAX)
+        # UpdatePlot(y)
+
+async def add_points():
+    """Simulate async incoming data."""
+    random.seed()
+    pygame.mixer.init()
+    pygame.mixer.music.load("AWholeNewWorld.mp3")
+    pygame.mixer.music.play()
+    while True:
+        update_plot_prime()
         await asyncio.sleep(0.05)
         # y = random.uniform(Y_MIN, Y_MAX)
         # UpdatePlot(y)

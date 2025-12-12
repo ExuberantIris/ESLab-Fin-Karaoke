@@ -16,6 +16,12 @@ class PitchWithOctave(tuple):
         octave = floor(i / 12) - 1
         return PitchWithOctave(base_pitch, octave)
 
+    @classmethod
+    def from_str(cls, str):
+        base_pitch = Pitch[str[:-1]]
+        octave = int(str[-1])
+        return PitchWithOctave(base_pitch, octave)
+    
     def __int__(self):
         # A = 10, C-1 = 0
         base_pitch, octave = self
