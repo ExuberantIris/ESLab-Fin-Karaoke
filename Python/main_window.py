@@ -125,7 +125,7 @@ async def add_points():
         # y = random.uniform(Y_MIN, Y_MAX)
         # UpdatePlot(y)
 
-async def add_points():
+async def add_points_prime():
     """Simulate async incoming data."""
     random.seed()
     pygame.mixer.init()
