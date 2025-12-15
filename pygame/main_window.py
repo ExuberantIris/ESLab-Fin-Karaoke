@@ -7,18 +7,18 @@ from Pitch import freq_to_pitch, Pitch, PitchWithOctave
 # --- Constants ---
 WIDTH, HEIGHT = 1024, 768
 FPS = 60
-NOTE_SPEED = 200  
-NOW_LINE_X = 300  
-COUNTDOWN_TIME = 3000 
+NOTE_SPEED = 200
+NOW_LINE_X = 300
+COUNTDOWN_TIME = 3000
 
 # Colors
-BG_DARK = (20, 24, 35)          
-GRID_LINE = (50, 55, 70)        
-NOTE_TARGET = (64, 158, 255)    
-NOTE_ACTIVE = (100, 200, 255)   
-USER_TRAIL_HIT = (255, 215, 0)  
-USER_TRAIL_MISS = (255, 50, 50) 
-USER_HEAD = (255, 255, 255)     
+BG_DARK = (20, 24, 35)
+GRID_LINE = (50, 55, 70)
+NOTE_TARGET = (64, 158, 255)
+NOTE_ACTIVE = (100, 200, 255)
+USER_TRAIL_HIT = (255, 215, 0)
+USER_TRAIL_MISS = (255, 50, 50)
+USER_HEAD = (255, 255, 255)
 TEXT_COLOR = (240, 240, 240)
 LYRIC_COLOR = (255, 255, 100)
 BUTTON_COLOR = (50, 200, 50)
@@ -67,19 +67,19 @@ class KaraokeGame:
         self.start_ticks = 0
         self.current_game_time = 0
         self.game_start_timestamp = 0
-        self.paused_time = 0  
+        self.paused_time = 0
         self.pause_start = 0
         
         self.current_user_freq = 0
         self.current_user_pitch = None
         self.score = 0
-        self.user_history = [] 
+        self.user_history = []
 
         self.min_pitch = PitchWithOctave(Pitch.A, 2)
         self.max_pitch = PitchWithOctave(Pitch.E, 5)
         self.pitch_list = list(PitchWithOctave.inclusive_range(self.min_pitch, self.max_pitch))
         
-        self.grid_top = 120  
+        self.grid_top = 120
         self.grid_bottom = HEIGHT - 100
         self.grid_h = self.grid_bottom - self.grid_top
         self.row_h = self.grid_h / len(self.pitch_list)
@@ -127,7 +127,7 @@ class KaraokeGame:
             for item in raw:
                 end_t = item["time"] + item["duration"]
                 self.notes.append({
-                    "time": item["time"], 
+                    "time": item["time"],
                     "duration": item["duration"],
                     "pitch": PitchWithOctave.from_str(item["pitch"]),
                     "end_time": end_t
@@ -142,19 +142,29 @@ class KaraokeGame:
 
     def load_lyrics(self):
         self.lyrics = [
-            {"time": 16500, "text": "I can show you the world"},
-            {"time": 20800, "text": "Shining, shimmering, splendid"},
-            {"time": 25000, "text": "Tell me, princess, now when did"},
-            {"time": 26800, "text": "You last let your heart decide?"},
-            {"time": 31300, "text": "I can open your eyes"},
-            {"time": 33400, "text": "Take you wonder by wonder"},
-            {"time": 37400, "text": "Over, sideways and under"},
-            {"time": 44400, "text": "On a magic carpet ride"},
-            {"time": 48200, "text": "A whole new world"},
-            {"time": 52400, "text": "A new fantastic point of view"},
-            {"time": 55800, "text": "No one to tell us no"},
-            {"time": 58800, "text": "Or where to go"},
-            {"time": 61000, "text": "Or say we're only dreaming"},
+            {"time": 16830, "text": "I can show you the world"},
+            {"time": 20979, "text": "shining, shimmering, splendid"},
+            {"time": 25124, "text": "Tell me princess"},
+            {"time": 26923, "text": "now when did you last"},
+            {"time": 29277, "text": "let your heart decide?"},
+            {"time": 31332, "text": "--"},
+            {"time": 33405, "text": "I can open your eyes"},
+            {"time": 37442, "text": "take you wonder by wonder"},
+            {"time": 41485, "text": "over, sideways and under"},
+            {"time": 44498, "text": "on a magic carpet ride"},
+            {"time": 48274, "text": "A whole new world"},
+            {"time": 52453, "text": "a new fantastic"},
+            {"time": 54178, "text": "point of view"},
+            {"time": 55873, "text": "No one to tell us no"},
+            {"time": 58808, "text": "or where to go"},
+            {"time": 61021, "text": "or say we're only dreaming"},
+            {"time": 63988, "text": "A whole new world"},
+            {"time": 67158, "text": "a dazzling place"},
+            {"time": 69345, "text": "I never know"},
+            {"time": 71551, "text": "But when I way up here"},
+            {"time": 74729, "text": "it's crystal-clear"},
+            {"time": 76697, "text": "that now I'm in a"},
+            {"time": 78900, "text": "whole new world with you"},
         ]
 
     def start(self):
@@ -384,8 +394,8 @@ class KaraokeGame:
 
         if self.state in [STATE_PLAYING, STATE_PAUSED, STATE_FINISHED]:
             for note in self.notes:
-                if note["end_time"] < self.current_game_time - 2000: continue 
-                if note["time"] > self.current_game_time + 4000: break 
+                if note["end_time"] < self.current_game_time - 2000: continue
+                if note["time"] > self.current_game_time + 4000: break
 
                 start_x = NOW_LINE_X + (note["time"] - self.current_game_time) / 1000.0 * NOTE_SPEED
                 width = (note["duration"] / 1000.0) * NOTE_SPEED
@@ -397,7 +407,7 @@ class KaraokeGame:
                         if note["time"] <= self.current_game_time <= note["end_time"]:
                             if self.current_user_pitch == note["pitch"]:
                                 is_hitting_now = True
-                                note["hit"] = True 
+                                note["hit"] = True
                     to_draw_notes.append((rect, note))
 
             if self.state == STATE_PLAYING and self.current_user_pitch:
@@ -436,7 +446,7 @@ class KaraokeGame:
             score_surf = self.score_font.render(f"Score: {self.score}", True, (255, 255, 255))
             self.screen.blit(score_surf, (WIDTH - 200, 70))
             
-            # pause 
+            # pause
             if self.state == STATE_PAUSED:
                 pause_surf = self.countdown_font.render("||", True, PAUSE_COLOR)
                 pause_rect = pause_surf.get_rect(center=(WIDTH/2, HEIGHT/2))
@@ -447,7 +457,7 @@ class KaraokeGame:
                 self.screen.blit(overlay, (0, 0))
                 self.screen.blit(pause_surf, pause_rect)
 
-        # control 
+        # control
         self.draw_control_hints()
 
         if self.state == STATE_FINISHED:
