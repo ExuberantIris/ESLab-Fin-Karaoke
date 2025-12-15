@@ -1,5 +1,6 @@
 import pygame
 import json
+import asyncio
 import os
 import gc
 from Pitch import freq_to_pitch, Pitch, PitchWithOctave
@@ -34,6 +35,7 @@ STATE_FINISHED = 4
 
 class KaraokeGame:
     def __init__(self):
+        pygame.mixer.pre_init(buffer=4096)
         pygame.init()
         pygame.font.init()
         
@@ -99,10 +101,13 @@ class KaraokeGame:
         self.restart_btn_rect = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 + 100, 200, 60)
         
         self.music_file = None
-        for filename in ["AWholeNewWorld.wav", "AWholeNewWorld.mp3"]:
+        for filename in ["AWholeNewWorld.wav"]:
             if os.path.exists(filename):
                 self.music_file = filename
-                break
+                break       
+        pygame.mixer.music.load(self.music_file)
+
+        self.paused = False
 
     def pre_draw_static_background(self):
         self.background_surface.fill(BG_DARK)
@@ -176,7 +181,6 @@ class KaraokeGame:
         self.paused_time = 0
         
         self.load_song_data()
-        
         gc.collect()
 
     def back_to_title(self):
@@ -191,8 +195,9 @@ class KaraokeGame:
         gc.collect()
         print("Returned to Title Screen")
 
-    def update_user_input(self, freq):
+    def update_user_input(self, freq, time):
         self.current_user_freq = freq
+        self.current_time = time
         if freq > 0:
             try:
                 self.current_user_pitch = freq_to_pitch(freq)
@@ -366,6 +371,7 @@ class KaraokeGame:
                 print("\n" + "="*50)
                 print("PLAY YOUR MUSIC NOW!")
                 print("="*50 + "\n")
+                pygame.mixer.music.play()
             else:
                 num_str = str(int(remain) + 1)
                 txt = self.countdown_font.render(num_str, True, (255, 200, 50))
@@ -380,14 +386,19 @@ class KaraokeGame:
                 return True
 
         elif self.state == STATE_PLAYING:
-            self.current_game_time = current_ticks - self.game_start_timestamp - self.paused_time
+            self.current_game_time = pygame.mixer.music.get_pos()#current_ticks - self.game_start_timestamp - self.paused_time
 
+            if self.paused:
+                pygame.mixer.music.unpause()
+                self.paused = False
+                
             if self.current_game_time > self.last_note_end_time + 2000:
                 self.state = STATE_FINISHED
                 print("■ Song finished")
         
         elif self.state == STATE_PAUSED:
-            pass
+            pygame.mixer.music.pause()
+            self.paused = True
 
         is_hitting_now = False
         to_draw_notes = []

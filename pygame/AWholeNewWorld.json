@@ -315,17 +315,17 @@
         "pitch": "A3"
     },
     {
-        "time": 52453.5,
+        "time": 52203.875,
         "duration": 249.625,
         "pitch": "Fs3"
     },
     {
-        "time": 52703.125,
+        "time": 52453.5,
         "duration": 499.25,
         "pitch": "G3"
     },
     {
-        "time": 53202.375,
+        "time": 52952.75,
         "duration": 499.25,
         "pitch": "B3"
     },
@@ -351,26 +351,31 @@
     },
     {
         "time": 54904.0,
-        "duration": 1210.625,
+        "duration": 969.25,
         "pitch": "Fs3"
     },
     {
         "time": 55388,
-        "duration": 566.125,
+        "duration": 727.875,
         "pitch": "Fs3"
     },
     {
         "time": 55873.25,
+        "duration": 566.125,
+        "pitch": "Fs3"
+    },
+    {
+        "time": 56358.5,
         "duration": 323.5,
         "pitch": "Fs3"
     },
     {
-        "time": 56196.75,
+        "time": 56682.0,
         "duration": 323.5,
         "pitch": "G3"
     },
     {
-        "time": 56520.25,
+        "time": 57005.5,
         "duration": 323.5,
         "pitch": "A3"
     },
@@ -516,26 +521,31 @@
     },
     {
         "time": 70570.75,
-        "duration": 1225.625,
+        "duration": 980.5,
         "pitch": "Fs3"
     },
     {
         "time": 71061,
-        "duration": 571.9583333333333,
+        "duration": 735.375,
         "pitch": "Fs3"
     },
     {
         "time": 71551.25,
+        "duration": 571.9583333333333,
+        "pitch": "Fs3"
+    },
+    {
+        "time": 72041.5,
         "duration": 326.8333333333333,
         "pitch": "Fs3"
     },
     {
-        "time": 71878.08333333333,
+        "time": 72368.33333333333,
         "duration": 326.8333333333333,
         "pitch": "G3"
     },
     {
-        "time": 72204.91666666667,
+        "time": 72695.16666666667,
         "duration": 326.8333333333333,
         "pitch": "A3"
     },
