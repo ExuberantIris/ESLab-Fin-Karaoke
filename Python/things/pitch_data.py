@@ -56,12 +56,12 @@ with open("SomeThing.txt", "r") as f:
             if pitch[0] != "Z" and pitch[0] != "z": 
                 if len(rythmn) and rythmn[-1]["pitch"] == pitch:
                     rythmn[-1]["duration"] += beat * beat_length
-
-                rythmn.append({
-                    "time": bar_start_time + cur_beat * beat_length,
-                    "duration": beat * beat_length,
-                    "pitch": pitch
-                })
+                else:
+                    rythmn.append({
+                        "time": bar_start_time + cur_beat * beat_length,
+                        "duration": beat * beat_length,
+                        "pitch": pitch
+                    })
             
             cur_beat += beat
         

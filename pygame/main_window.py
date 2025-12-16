@@ -4,6 +4,7 @@ import asyncio
 import os
 import gc
 from Pitch import freq_to_pitch, Pitch, PitchWithOctave
+import threading
 
 # --- Constants ---
 WIDTH, HEIGHT = 1024, 768
@@ -35,8 +36,9 @@ STATE_FINISHED = 4
 
 class KaraokeGame:
     def __init__(self):
-        pygame.mixer.pre_init(buffer=4096)
         pygame.init()
+        pygame.mixer.quit()
+        pygame.mixer.init(48000, -16, 2, 512)
         pygame.font.init()
         
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.DOUBLEBUF)
@@ -99,16 +101,23 @@ class KaraokeGame:
         self.cached_lyric_shadow = None
 
         self.restart_btn_rect = pygame.Rect(WIDTH//2 - 100, HEIGHT//2 + 100, 200, 60)
-        
+
         self.music_file = None
-        for filename in ["AWholeNewWorld.wav"]:
+        for filename in ["AWholeNewWorld.mp3"]:
             if os.path.exists(filename):
                 self.music_file = filename
-                break       
+                break  
+
         pygame.mixer.music.load(self.music_file)
-
+        self.music_thread = threading.Thread(target=self.play_music)
         self.paused = False
+        self.delay_time = 0
 
+    def play_music(self):
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy():
+            pygame.time.delay(1000)
+    
     def pre_draw_static_background(self):
         self.background_surface.fill(BG_DARK)
         for p in self.pitch_list:
@@ -373,7 +382,7 @@ class KaraokeGame:
                 print("\n" + "="*50)
                 print("PLAY YOUR MUSIC NOW!")
                 print("="*50 + "\n")
-                pygame.mixer.music.play()
+                self.music_thread.start()
             else:
                 num_str = str(int(remain) + 1)
                 txt = self.countdown_font.render(num_str, True, (255, 200, 50))
@@ -391,17 +400,18 @@ class KaraokeGame:
             #self.current_game_time = pygame.mixer.music.get_pos()
             self.current_game_time = current_ticks - self.game_start_timestamp - self.paused_time
 
-            if self.paused:
-                pygame.mixer.music.unpause()
-                self.paused = False
+            # if self.paused:
+            #     pygame.mixer.music.unpause()
+            #     self.paused = False
                 
             if self.current_game_time > self.last_note_end_time + 2000:
                 self.state = STATE_FINISHED
                 print("■ Song finished")
         
         elif self.state == STATE_PAUSED:
-            pygame.mixer.music.pause()
-            self.paused = True
+            # pygame.mixer.music.pause()
+            # self.paused = True
+            pass
 
         is_hitting_now = False
         to_draw_notes = []
@@ -418,7 +428,7 @@ class KaraokeGame:
                 if y is not None:
                     rect = pygame.Rect(start_x, y, width, self.row_h - 1)
                     if self.state == STATE_PLAYING:
-                        if note["time"] <= self.current_game_time <= note["end_time"]:
+                        if note["time"] <= self.current_game_time - self.delay_time <= note["end_time"]:
                             if self.current_user_pitch:
                                 #convert pitch to MIDI index
                                 user_pitch_val = int(self.current_user_pitch)
@@ -433,7 +443,14 @@ class KaraokeGame:
                     to_draw_notes.append((rect, note))
 
             if self.state == STATE_PLAYING and self.current_user_pitch:
-                self.user_history.append((self.current_game_time, self.current_user_pitch, is_hitting_now))
+                aroundFs3 = [
+                    PitchWithOctave(Pitch.E, 3), PitchWithOctave(Pitch.F, 3), 
+                    PitchWithOctave(Pitch.Fs, 3), PitchWithOctave(Pitch.G, 3), PitchWithOctave(Pitch.Gs, 3)
+                ]
+                if (self.delay_time == 0 and self.current_user_pitch in aroundFs3 and self.current_game_time >= 16830):
+                    print(self.delay_time)
+                    self.delay_time = self.current_game_time - 16830
+                self.user_history.append((self.current_game_time - self.delay_time, self.current_user_pitch, is_hitting_now))
                 if is_hitting_now:
                     self.score += 1
 

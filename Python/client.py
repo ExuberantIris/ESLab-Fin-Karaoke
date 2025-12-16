@@ -11,8 +11,11 @@ TARGET_NAME = "BlueNRG"   # Peripheral name
 
 def notification_handler(sender, data):
     """Callback when notification is received."""
-    print(f"[NOTIFY] {sender}: {int(data[:2].hex(), 16)}   raw={data[:2]}")
-    UpdatePlot(int(data[:2].hex(), 16))
+    pitch_value = int(data[:2].hex(), 16)
+    time = int(data[:1:-1].hex(), 16)
+
+    print(f"[BLE AUDIO] raw={data}  pitch={pitch_value}, time={time}")
+    UpdatePlot(pitch_value)
 
 
 async def find_device():
@@ -36,7 +39,7 @@ async def main():
 
         # 2. connect
         print(f"Connecting to {address} ...")
-        async with BleakClient(address) as client:
+        async with BleakClient(address, timeout=100) as client:
             print("Connected:", client.is_connected)
 
             # 3. start notification on characteristic 0x3C00
