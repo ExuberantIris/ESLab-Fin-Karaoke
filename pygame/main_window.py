@@ -184,6 +184,8 @@ class KaraokeGame:
         gc.collect()
 
     def back_to_title(self):
+        pygame.mixer.music.stop()
+        self.paused = False
        
         self.state = STATE_IDLE
         self.score = 0
@@ -386,7 +388,8 @@ class KaraokeGame:
                 return True
 
         elif self.state == STATE_PLAYING:
-            self.current_game_time = pygame.mixer.music.get_pos()#current_ticks - self.game_start_timestamp - self.paused_time
+            #self.current_game_time = pygame.mixer.music.get_pos()
+            self.current_game_time = current_ticks - self.game_start_timestamp - self.paused_time
 
             if self.paused:
                 pygame.mixer.music.unpause()
@@ -416,9 +419,17 @@ class KaraokeGame:
                     rect = pygame.Rect(start_x, y, width, self.row_h - 1)
                     if self.state == STATE_PLAYING:
                         if note["time"] <= self.current_game_time <= note["end_time"]:
-                            if self.current_user_pitch == note["pitch"]:
-                                is_hitting_now = True
-                                note["hit"] = True
+                            if self.current_user_pitch:
+                                #convert pitch to MIDI index
+                                user_pitch_val = int(self.current_user_pitch)
+                                target_pitch_val = int(note["pitch"])
+                        
+                                if abs(user_pitch_val - target_pitch_val) <= 1:
+                                    is_hitting_now = True
+                                    note["hit"] = True
+                            #if self.current_user_pitch == note["pitch"]:
+                                #is_hitting_now = True
+                                #note["hit"] = True
                     to_draw_notes.append((rect, note))
 
             if self.state == STATE_PLAYING and self.current_user_pitch:
