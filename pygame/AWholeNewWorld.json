@@ -65,11 +65,6 @@
         "pitch": "E3"
     },
     {
-        "time": 25124,
-        "duration": 514.25,
-        "pitch": "E3"
-    },
-    {
         "time": 25638.25,
         "duration": 257.125,
         "pitch": "Ds3"
@@ -131,22 +126,7 @@
     },
     {
         "time": 31075.125,
-        "duration": 1293.375,
-        "pitch": "A2"
-    },
-    {
-        "time": 31332,
-        "duration": 1554.75,
-        "pitch": "A2"
-    },
-    {
-        "time": 32368.5,
-        "duration": 777.375,
-        "pitch": "A2"
-    },
-    {
-        "time": 32886.75,
-        "duration": 259.125,
+        "duration": 2070.75,
         "pitch": "A2"
     },
     {
@@ -215,11 +195,6 @@
         "pitch": "E3"
     },
     {
-        "time": 41485,
-        "duration": 500.5,
-        "pitch": "E3"
-    },
-    {
         "time": 41985.5,
         "duration": 250.25,
         "pitch": "Ds3"
@@ -281,17 +256,7 @@
     },
     {
         "time": 47263.0,
-        "duration": 504.625,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 47514,
-        "duration": 507.25,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 48274.875,
-        "duration": 253.625,
+        "duration": 758.25,
         "pitch": "Fs3"
     },
     {
@@ -307,11 +272,6 @@
     {
         "time": 49543,
         "duration": 2411.25,
-        "pitch": "A3"
-    },
-    {
-        "time": 51455,
-        "duration": 499.25,
         "pitch": "A3"
     },
     {
@@ -345,28 +305,8 @@
         "pitch": "G3"
     },
     {
-        "time": 54420.0,
-        "duration": 484.0,
-        "pitch": "G3"
-    },
-    {
         "time": 54904.0,
-        "duration": 969.25,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 55388,
-        "duration": 727.875,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 55873.25,
-        "duration": 566.125,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 56358.5,
-        "duration": 323.5,
+        "duration": 1535.375,
         "pitch": "Fs3"
     },
     {
@@ -395,11 +335,6 @@
         "pitch": "A3"
     },
     {
-        "time": 58808.0,
-        "duration": 246.5,
-        "pitch": "A3"
-    },
-    {
         "time": 59054.5,
         "duration": 246.5,
         "pitch": "D3"
@@ -417,11 +352,6 @@
     {
         "time": 60284.0,
         "duration": 737.25,
-        "pitch": "A3"
-    },
-    {
-        "time": 60775.5,
-        "duration": 245.75,
         "pitch": "A3"
     },
     {
@@ -480,11 +410,6 @@
         "pitch": "A3"
     },
     {
-        "time": 67158,
-        "duration": 485.5,
-        "pitch": "A3"
-    },
-    {
         "time": 67886.25,
         "duration": 242.75,
         "pitch": "Fs3"
@@ -515,28 +440,8 @@
         "pitch": "G3"
     },
     {
-        "time": 70080.5,
-        "duration": 490.25,
-        "pitch": "G3"
-    },
-    {
         "time": 70570.75,
-        "duration": 980.5,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 71061,
-        "duration": 735.375,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 71551.25,
-        "duration": 571.9583333333333,
-        "pitch": "Fs3"
-    },
-    {
-        "time": 72041.5,
-        "duration": 326.8333333333333,
+        "duration": 1552.4583333333333,
         "pitch": "Fs3"
     },
     {
@@ -565,11 +470,6 @@
         "pitch": "A3"
     },
     {
-        "time": 74485.25,
-        "duration": 243.875,
-        "pitch": "A3"
-    },
-    {
         "time": 74729.125,
         "duration": 243.875,
         "pitch": "D3"
@@ -585,18 +485,8 @@
         "pitch": "D4"
     },
     {
-        "time": 75465.75,
-        "duration": 492.75,
-        "pitch": "D4"
-    },
-    {
         "time": 75958.5,
         "duration": 739.125,
-        "pitch": "A3"
-    },
-    {
-        "time": 76451.25,
-        "duration": 246.375,
         "pitch": "A3"
     },
     {
