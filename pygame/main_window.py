@@ -5,6 +5,7 @@ import os
 import gc
 from Pitch import freq_to_pitch, Pitch, PitchWithOctave
 import threading
+    
 
 # --- Constants ---
 WIDTH, HEIGHT = 1024, 768
@@ -79,8 +80,8 @@ class KaraokeGame:
         self.score = 0
         self.user_history = []
 
-        self.min_pitch = PitchWithOctave(Pitch.A, 2)
-        self.max_pitch = PitchWithOctave(Pitch.E, 5)
+        self.min_pitch = PitchWithOctave(Pitch.F, 2)
+        self.max_pitch = PitchWithOctave(Pitch.F, 4)
         self.pitch_list = list(PitchWithOctave.inclusive_range(self.min_pitch, self.max_pitch))
         
         self.grid_top = 120
@@ -115,8 +116,8 @@ class KaraokeGame:
 
     def play_music(self):
         pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            pygame.time.delay(1000)
+        while True:
+            pygame.time.delay(50)
     
     def pre_draw_static_background(self):
         self.background_surface.fill(BG_DARK)
@@ -397,8 +398,10 @@ class KaraokeGame:
                 return True
 
         elif self.state == STATE_PLAYING:
+            DELAY = 792#528
             #self.current_game_time = pygame.mixer.music.get_pos()
-            self.current_game_time = current_ticks - self.game_start_timestamp - self.paused_time
+            self.current_game_time = current_ticks - self.game_start_timestamp - self.paused_time - DELAY
+            self.current_game_time = 0 if self.current_game_time < 0 else self.current_game_time
 
             # if self.paused:
             #     pygame.mixer.music.unpause()
@@ -447,7 +450,7 @@ class KaraokeGame:
                     PitchWithOctave(Pitch.E, 3), PitchWithOctave(Pitch.F, 3), 
                     PitchWithOctave(Pitch.Fs, 3), PitchWithOctave(Pitch.G, 3), PitchWithOctave(Pitch.Gs, 3)
                 ]
-                if (self.delay_time == 0 and self.current_user_pitch in aroundFs3 and self.current_game_time >= 16830):
+                if (self.delay_time == 0 and self.current_user_pitch in aroundFs3 and self.current_game_time >= 16830 - DELAY - 500):
                     print(self.delay_time)
                     self.delay_time = self.current_game_time - 16830
                 self.user_history.append((self.current_game_time - self.delay_time, self.current_user_pitch, is_hitting_now))

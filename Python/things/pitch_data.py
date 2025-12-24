@@ -54,7 +54,10 @@ with open("SomeThing.txt", "r") as f:
                 pitch = maybe_pitch
 
             if pitch[0] != "Z" and pitch[0] != "z": 
-                if len(rythmn) and rythmn[-1]["pitch"] == pitch:
+                if (len(rythmn) and 
+                    rythmn[-1]["pitch"] == pitch and 
+                    abs(rythmn[-1]["time"] + rythmn[-1]["duration"] - bar_start_time - cur_beat * beat_length) <= 10.0
+                    ):
                     rythmn[-1]["duration"] += beat * beat_length
                 else:
                     rythmn.append({
@@ -69,5 +72,5 @@ with open("SomeThing.txt", "r") as f:
 
 #print(rythmn)
 print("OK")
-with open("AWholeNewWorld.json", "w") as f:
+with open("../AWholeNewWorld.json", "w") as f:
     json.dump(rythmn, f, indent=4)

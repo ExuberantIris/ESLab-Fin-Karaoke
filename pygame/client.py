@@ -1,13 +1,15 @@
 import asyncio
 import struct
+import traceback
 from bleak import BleakClient, BleakScanner
 from main_window import KaraokeGame 
 
-#DEVICE_ADDRESS = "F3:9A:AA:F0:53:1B"
-DEVICE_ADDRESS = "DF49F975-EDAD-04D0-63CD-75DCDE538AB4" 
+DEVICE_ADDRESS = "F3:9A:AA:F0:53:1B"
 
-#CHARACTERISTIC_UUID = "00003c00-0000-1000-8000-00805f9b34fb"
-CHARACTERISTIC_UUID = "00000001-0000-00b0-0000-000000000000" 
+#DEVICE_ADDRESS = "DF49F975-EDAD-04D0-63CD-75DCDE538AB4" 
+
+CHARACTERISTIC_UUID = "00003c00-0000-1000-8000-00805f9b34fb"
+#CHARACTERISTIC_UUID = "00000001-0000-00b0-0000-000000000000" 
 
 game = KaraokeGame()
 
@@ -27,13 +29,17 @@ def notification_handler(sender, data):
             #game.update_user_input(float(simulated_pitch))
             
     except Exception as e:
-        print(f"error: {e}")
+        print(traceback.format_exc())
+        pitch_value = 0
+        time = 0
 
 async def run_ble_game():
-
+    global DEVICE_ADDRESS
     # print(f"Currently Connected {DEVICE_ADDRESS}...")
     # devices = await BleakScanner.discover(1)
     # for d in devices:
+    #     if d.name == "BlueNRGPPU":
+    #         DEVICE_ADDRESS = d.address
     #     print(d.name, d.address)
 
     print(f"Currently Connected {DEVICE_ADDRESS}...")
@@ -53,12 +59,11 @@ async def run_ble_game():
         except Exception as e:
         # stop notify
             await client.stop_notify(CHARACTERISTIC_UUID)
-            raise e
 
 if __name__ == "__main__":
     try:
         asyncio.run(run_ble_game())
     except Exception as e:
-        print(f"error: {e}")
+        print(traceback.format_exc())
     finally:
         game.quit()

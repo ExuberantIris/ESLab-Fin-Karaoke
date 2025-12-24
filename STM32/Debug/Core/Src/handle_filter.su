@@ -1,0 +1,5 @@
+../Core/Src/handle_filter.c:20:6:init_filter	8	static
+../Core/Src/handle_filter.c:24:9:handle_filter	56	static
+../Core/Src/handle_filter.c:79:7:autocorrelation	24	static
+../Core/Src/handle_filter.c:105:5:freq_comp	24	static
+../Core/Src/handle_filter.c:115:10:freq_heuristic	32	static
